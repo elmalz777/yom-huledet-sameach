@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Happy Birthday Yhigal</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body, html {
+            background-color: #FFFFFF;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            color: #1E1B4B;
+            height: 100%;
+            width: 100%;
+        }
+
+        body.lock-scroll {
+            overflow: hidden;
+        }
+        
+        body.allow-scroll {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* -----------------------------------------
+           BLOCK 1: CAKE & CANDLES
+        ----------------------------------------- */
+        .confetti-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(#FFD700 4px, transparent 4px), 
+                radial-gradient(#FF69B4 4px, transparent 4px),
+                radial-gradient(#00CED1 4px, transparent 4px),
+                radial-gradient(#FF4500 3px, transparent 3px),
+                radial-gradient(#32CD32 3px, transparent 3px);
+            background-size: 80px 80px;
+            background-position: 0 0, 40px 40px, 20px 20px, 60px 60px, 10px 50px;
+            opacity: 0.35;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #1E1B4B;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+        
+        .start-btn {
+            background-color: #FFFFFF;
+            color: #1E1B4B;
+            padding: 22px 44px;
+            font-size: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .page-block {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .curved-text-svg {
+            width: 100%;
+            max-width: 420px;
+            height: 140px;
+            margin-bottom: -10px;
+        }
+        .curved-text-svg text {
+            fill: #1E1B4B;
+            font-size: 32px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            font-size: 26px;
+            font-weight: 800;
+            color: #1E1B4B;
+            margin-bottom: 15px;
+        }
+
+        .fika-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin-bottom: 40px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bun-emoji-wrapper {
+            font-size: 160px;
+            line-height: 1;
+            z-index: 2;
+            filter: drop-shadow(0 20px 25px rgba(0,0,0,0.15));
+            position: absolute;
+            bottom: 10px;
+            user-select: none;
+        }
+
+        .candles-group {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 5px;
+            z-index: 3;
+            user-select: none;
+        }
+
+        .candle-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .flame {
+            font-size: 42px;
+            position: absolute;
+            top: -45px;
+            transform: scale(0);
+            opacity: 0;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
+            filter: drop-shadow(0 0 15px #FFD700) drop-shadow(0 0 25px #FF8C00);
+            transform-origin: bottom center;
+        }
+
+        .flame.ignited {
+            transform: scale(1);
+            opacity: 1;
+            animation: flicker 0.1s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-2deg); }
+            100% { transform: scale(1.08) rotate(2deg); }
+        }
+
+        .digit-emoji {
+            font-size: 75px;
+            line-height: 1;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+        }
+
+        .hint-text {
+            font-size: 16px;
+            color: #1E1B4B;
+            font-weight: 800;
+            max-width: 320px;
+            line-height: 1.5;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 12px 24px;
+            border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        }
+
+        /* -----------------------------------------
+           BLOCK 2: LIVE 3D FORESTS & MOUNTAINS
+        ----------------------------------------- */
+       .forest-block {
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 60px 20px;
+            /* Атмосферный фон: горы Цугшпитце, туманный лес */
+            background: linear-gradient(to bottom, rgba(255,255,255,0.2), rgba(30,27,75,0.4)), 
+                        url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80') no-repeat center center;
+            background-size: cover;
+            background-attachment: scroll;
+            z-index: 10;
+        }
+
+        /* Почтовый ящик */
+        .mailbox-container {
+            font-size: 100px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            z-index: 15;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4));
+            transition: transform 0.3s ease;
+            user-select: none;
+        }
+        
+        /* КОНВЕРТ (Изначально скрыт, появляется из ящика) */
+        .envelope-container {
+            display: none;
+            font-size: 90px;
+            cursor: pointer;
+            z-index: 15;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+            animation: popUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            user-select: none;
+            margin-bottom: 30px;
+        }
+        
+        @keyframes popUp {
+            from { transform: scale(0) translateY(50px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        /* КАТЕГОРИЯ ДОСТАВКИ ИЗ КОНВЕРТА */
+        .letter-delivery {
+            display: none;
+            width: 100%;
+            max-width: 360px;
+            flex-direction: column;
+            align-items: center;
+            gap: 35px;
+            z-index: 15;
+            animation: slideUpOpen 0.7s ease-out forwards;
+        }
+
+        @keyframes slideUpOpen {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ФОТОБУДКА */
+        .photobut-strip {
+            background-color: #FFFFFF;
+            padding: 12px 12px 24px 12px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            transform: rotate(-2.5deg);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 210px;
+            border-radius: 2px;
+        }
+        .photobut-strip .photo-frame {
+            width: 100%;
+            height: 160px;
+            background-color: #E2E8F0;
+            overflow: hidden;
+        }
+        .photobut-strip .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ЛЮБОВНОЕ ПИСЬМО (ПЕЧАТНАЯ МАШИНКА) */
+        .typewritten-letter {
+            background-color: #FDFBF7;
+            font-family: 'Courier Prime', 'Courier New', monospace;
+            font-weight: 400;
+            color: #2D2D2D;
+            padding: 35px 25px;
+            border-radius: 4px;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.05), 0 20px 45px rgba(0,0,0,0.2);
+            text-align: left;
+            width: 100%;
+            line-height: 1.6;
+            font-size: 15px;
+            border-left: 4px solid #DFD9CE;
+        }
+
+        .typewritten-letter h3 {
+            font-family: 'Courier Prime', monospace;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        
+        .love-text {
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        /* ТАЙНЫЙ ПЛАН СВИДАНИЯ С КАРТИНКАМИ */
+        .secret-itinerary {
+            border-top: 2px dashed #D1C9BC;
+            margin-top: 25px;
+            padding-top: 25px;
+        }
+        
+        .itinerary-title {
+            font-family: 'Courier Prime', monospace;
+            font-weight: 700;
+            font-size: 16px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            color: #1E1B4B;
+            text-align: center;
+        }
+
+        .plan-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .plan-img {
+            width: 65px;
+            height: 65px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            background-color: #E2E8F0;
+        }
+
+        .plan-details h4 {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1E1B4B;
+            margin-bottom: 2px;
+        }
+        .plan-details p {
+            font-size: 12px;
+            color: #555555;
+            line-height: 1.4;
+        }
+
+        /* БОНУС ТАЙМЕР */
+        .bonus-box {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #E2DCD0;
+        }
+
+        .bonus-badge {
+            background-color: #FEF3C7;
+            color: #92400E;
+            font-weight: 700;
+            padding: 3px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .date-picker-wrapper {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .date-picker-wrapper label {
+            font-size: 11px;
+            display: block;
+            margin-bottom: 6px;
+            color: #555555;
+        }
+
+        .arrival-input {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            padding: 8px 12px;
+            border: 2px solid #1E1B4B;
+            border-radius: 10px;
+            outline: none;
+            color: #1E1B4B;
+            font-size: 13px;
+        }
+
+        .countdown-display {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .countdown-item {
+            background-color: #1E1B4B;
+            color: #FFFFFF;
+            padding: 8px 10px;
+            border-radius: 6px;
+            min-width: 52px;
+            text-align: center;
+        }
+
+        .countdown-num {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            display: block;
+        }
+
+        .countdown-label {
+            font-size: 8px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body class="lock-scroll">
+
+    <div id="overlay">
+        <button class="start-btn" onclick="initSite()">Open Yhigal's gift✨🦦</button>
+    </div>
+
+    <div class="confetti-bg"></div>
+
+    <section class="page-block">
+        <svg class="curved-text-svg" viewBox="0 0 400 130">
+            <path id="text-path" d="M 30,110 A 150,90 0 0,1 370,110" fill="transparent"/>
+            <text>
+                <textPath xlink:href="#text-path" startOffset="50%" text-anchor="middle">
+                    Happy Birthday Yhigal!
+                </textPath>
+            </text>
+        </svg>
+
+        <p class="subtitle">יום הולדת שמח</p>
+
+        <div class="fika-container" onclick="handleTap()">
+            <div class="candles-group">
+                <div class="candle-wrapper">
+                    <span class="flame" id="flame1">🔥</span>
+                    <span class="digit-emoji">2</span>
+                </div>
+                <div class="candle-wrapper" style="margin-top: 5px;">
+                    <span class="flame" id="flame2">🔥</span>
+                    <span class="digit-emoji">3</span>
+                </div>
+            </div>
+            <div class="bun-emoji-wrapper">🥮</div>
+        </div>
+
+        <p class="hint-text" id="status-hint">MAKE A WISH AND TAP ON THE CAKE</p>
+    </section>
+
+    <section class="forest-block" id="second-screen">
+        <div class="parallax-bg layer-mountains" id="layer-mountains"></div>
+        <div class="parallax-bg layer-trees"></div>
+        
+        <div class="mailbox-container" id="mailbox" onclick="popEnvelope()">📬</div>
+
+        <div class="envelope-container" id="envelope" onclick="openLetter()">💌</div>
+
+       <div class="letter-delivery" id="letter-content">
+            
+            <div class="photobut-strip">
+                <div class="photo-frame"><img src="img/photo1.jpg" alt="Photo 1"></div>
+                <div class="photo-frame"><img src="img/photo2.jpg" alt="Photo 2"></div>
+                <div class="photo-frame"><img src="img/photo3.jpg" alt="Photo 3"></div>
+            </div>
+    
+            <div class="typewritten-letter">
+                <h3> Mon cœur,</h3>
+                <p class="love-text">ois guade zum Geburtsdag!!                              I sincerely admire your kindness, resolve and inner strength. There is so much depth and light in you! Stay strong <3
+
+Please, don't doubt yourself! If an idea has reached you, it means it is already possible.
+
+Trust yourself, your journey, and your heart! Explore yourself and the world around, move forward bravely, and remember that you already possess EVERYTHING you need!!
+
+p.s. miss you and cannot wait to celebrate together💋✨🦦
+Liza</p>
+                
+                <div class="secret-itinerary">
+                    <div class="itinerary-title">✨Celebrating ba'aretz✨</div>
+                    
+                    <div class="plan-item">
+                        <img src="https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=120&q=80" class="plan-img" alt="Biking">
+                        <div class="plan-details">
+                            <h4>Bicycle ride</h4>
+                            <p>We’ll bike through Jerusalem’s hidden paths, passing through the cool, echoing magic of the bike tunnel. We’ll chase the wind, soak in the views, and pretend we’re athletic legends.</p>
+                        </div>
+                    </div>
+
+                    <div class="plan-item">
+                        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=120&q=80" class="plan-img" alt="Picnic">
+                        <div class="plan-details">
+                            <h4>Picnic on the hills</h4>
+                            <p>A slow, dreamy escape (mostly because we’ll probably spend 20 minutes trying to find the perfect hill). Once we land, spread out a soft blanket, and lose track of time while sharing all your favorite treats. With the sun setting and just the sound of nature around us, it’s going to be the most peaceful part of the day.</p>
+                        </div>
+                    </div>
+
+                    <div class="plan-item">
+                        <img src="https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=120&q=80" class="plan-img" alt="Jazz">
+                        <div class="plan-details">
+                            <h4>Jazz club night</h4>
+                            <p>We’re heading to a jazz club in Tel Aviv for a late-night dance. Since you love jazz, i can’t wait to discover the spot together. We’ll just dance in our own rhythm: a little messy, but perfect.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bonus-box">
+                    <span class="bonus-badge">SPECIAL BONUS</span>
+                    <p>If you touch down in Israel before 16/7, on July 16th we are going to the best classical arabic music concert with the most stunning view of Jerusalem!(tickets are already in my pocket)</p>
+                    
+                    <div class="date-picker-wrapper">
+                        <label for="arrival-date">Enter your arrival date to start countdown:</label>
+                        <input type="date" id="arrival-date" class="arrival-input" onchange="startCountdown()">
+                    </div>
+
+                    <div class="countdown-display" id="timer-display" style="display: none;">
+                        <div class="countdown-item"><span class="countdown-num" id="days">00</span><span class="countdown-label">Days</span></div>
+                        <div class="countdown-item"><span class="countdown-num" id="hours">00</span><span class="countdown-label">Hrs</span></div>
+                        <div class="countdown-item"><span class="countdown-num" id="minutes">00</span><span class="countdown-label">Min</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <audio id="birthday-song" loop>
+        <source src="https://www.iemj.org/wp-content/uploads/2025/05/2.Siman-tov-Mazal-tov-Les-Chevatim.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        let currentState = 'hidden'; 
+        const song = document.getElementById('birthday-song');
+        let countdownInterval;
+
+        // 3D Параллакс эффект при скролле
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const mountainLayer = document.getElementById('layer-mountains');
+            // Смещаем горы медленнее, создавая иллюзию объема и дали
+            if(mountainLayer) {
+                mountainLayer.style.transform = `translateY(${scrolled * 0.25}px)`;
+            }
+        });
+
+        function initSite() {
+            document.getElementById('overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('overlay').style.display = 'none';
+                song.play().catch(e => console.log("Audio playing preference"));
+                document.getElementById('flame1').classList.add('ignited');
+                document.getElementById('flame2').classList.add('ignited');
+                currentState = 'burning';
+            }, 500);
+        }
+
+        function handleTap() {
+            if (currentState === 'burning') {
+                const f1 = document.getElementById('flame1');
+                const f2 = document.getElementById('flame2');
+                f1.innerHTML = "💨"; f2.innerHTML = "💨";
+                
+                setTimeout(() => { f1.style.opacity = "0"; f2.style.opacity = "0"; }, 200);
+
+                confetti({
+                    particleCount: 220, spread: 90, origin: { y: 0.6 },
+                    colors: ['#1E1B4B', '#FFD700', '#FF69B4', '#00CED1', '#FF4500', '#32CD32']
+                });
+
+                document.getElementById('status-hint').innerHTML = "✨SCROLL DOWN✨";
+                document.getElementById('status-hint').style.color = '#FF69B4';
+                
+                document.body.classList.remove('lock-scroll');
+                document.body.classList.add('allow-scroll');
+                currentState = 'finished';
+            }
+        }
+
+        // Клик 1: достаем закрытый конверт из ящика
+        function popEnvelope() {
+            document.getElementById('mailbox').innerHTML = "📭";
+            document.getElementById('envelope').style.display = 'inline-block';
+        }
+
+        // Клик 2: открываем конверт и достаем содержимое
+        function openLetter() {
+            document.getElementById('envelope').innerHTML = "📂";
+            const content = document.getElementById('letter-content');
+            content.style.display = 'flex';
+            
+            setTimeout(() => {
+                content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 150);
+        }
+
+        // Таймер обратного отсчета
+        function startCountdown() {
+            const inputDate = document.getElementById('arrival-date').value;
+            if (!inputDate) return;
+
+            const targetDate = new Date(inputDate + 'T00:00:00').getTime();
+            document.getElementById('timer-display').style.display = 'flex';
+
+            if (countdownInterval) clearInterval(countdownInterval);
+
+            function updateTimer() {
+                const now = new Date().getTime();
+                const difference = targetDate - now;
+
+                if (difference <= 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById('days').innerText = "00";
+                    document.getElementById('hours').innerText = "00";
+                    document.getElementById('minutes').innerText = "00";
+                    return;
+                }
+
+                const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+
+                document.getElementById('days').innerText = d < 10 ? '0' + d : d;
+                document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
+                document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
+            }
+
+            updateTimer();
+            countdownInterval = setInterval(updateTimer, 60000);
+        }
+    </script>
+</body>
+</html>
